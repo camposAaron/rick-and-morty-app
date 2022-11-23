@@ -61,10 +61,12 @@ export default {
   async mounted() {
     this.id = this.$route.params.id;
     const character = await getCharacterById(this.id);
-    const { cant, comments } = getCommentsById(this.id);
-    character.comments = cant;
+    const response = getCommentsById(this.id);
+    if (response) {
+      character.comments = response.cant;
+      this.comments = response.comments;
+    }
     this.character = character;
-    this.comments = comments;
   }
 }
 </script>
@@ -139,7 +141,7 @@ button:hover {
   background-color: rgb(109, 161, 30);
 }
 
-.info{
+.info {
   width: 30%;
 }
 
@@ -149,7 +151,7 @@ button:hover {
     width: 40%;
   }
 
-  .comments{
+  .comments {
     width: 80%;
   }
 }
@@ -159,7 +161,7 @@ button:hover {
     width: 60%;
   }
 
-  .comments{
+  .comments {
     width: 80%;
   }
 }
@@ -170,7 +172,7 @@ button:hover {
     width: 100%;
   }
 
-  .comments{
+  .comments {
     width: 100%;
   }
 }

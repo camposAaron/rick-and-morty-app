@@ -5,6 +5,8 @@ const getCommentsById = (characterId) => {
   if (data) {
     userComments = data.filter((c) => c.id === characterId);
     return { cant: userComments.length, comments: userComments }
+  }else{
+    return null
   }
 }
 
