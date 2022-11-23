@@ -1,5 +1,6 @@
 <template>
   <main>
+    <Filter @setFilter="setFilter" />
     <section id="list">
       <template v-for="character in characters" :key="character.id">
         <CharacterItem :character="character" />
@@ -8,16 +9,18 @@
   </main>
   <footer>
     <Paginator :totalPages="totalPages" :currentPage="currentPage" @SetPage="setPage" :pages="pages"
-      @nextPages="nextPages" @prevPages="prevPages"/>
+      @nextPages="nextPages" @prevPages="prevPages" />
   </footer>
 </template>
 
 <script>
 //components
 import CharacterItem from '../components/CharacterItem.vue';
+import Filter from '../components/Filter.vue';
 import Paginator from '../components/Paginator.vue';
 
-import { getCharacters } from '../services/characters.service';
+import { getFilteredCharacters } from '../services/characters.service';
+
 
 export default {
   data() {
@@ -25,26 +28,33 @@ export default {
       characters: [],
       currentPage: 1,
       totalPages: 0,
-      pages: []
+      pages: [],
+      selectedFilter : ''
     };
   },
   components: {
     CharacterItem,
-    Paginator
+    Paginator,
+    Filter
   },
   methods: {
     async setPage(number) {
-      const { characters, info } = await getCharacters(number);
+      const { characters, info } = await getFilteredCharacters(this.selectedFilter,number );
       this.characters = characters;
       this.currentPage = number;
+      //save on localstorage.
+      // setCurrentPage(this.currentPage);
       this.totalPages = info.pages;
     },
     async nextPages() {
       const newCurrentPage = this.pages.pop() + 1;
       this.pages = [];
-      const { characters, info } = await getCharacters(newCurrentPage);
+      const { characters, info } = await getFilteredCharacters( this.selectedFilter, newCurrentPage);
       this.characters = characters;
       this.currentPage = newCurrentPage;
+      //save on localstorage.
+      // setCurrentPage(this.currentPage);
+
       this.totalPages = info.pages;
 
       for (let i = this.currentPage; i < this.currentPage + 5; i++) {
@@ -55,21 +65,38 @@ export default {
     async prevPages() {
       const newCurrentPage = this.pages.shift() - 5;
       this.pages = [];
-      const { characters, info } = await getCharacters(newCurrentPage);
+      const { characters, info } = await getFilteredCharacters(this.selectedFilter, newCurrentPage);
       this.characters = characters;
       this.currentPage = newCurrentPage;
+      //save on localstorage.
+      // setCurrentPage(this.currentPage);
       this.totalPages = info.pages;
 
       for (let i = this.currentPage; i < this.currentPage + 5; i++) {
         if (i <= this.totalPages)
           this.pages.push(i)
       }
+    },
+    async setFilter(option) {
+      this.pages = [];
+      const { characters, info } = await getFilteredCharacters(option);
+      this.characters = characters;
+      this.currentPage = 1;
+      this.totalPages = characters.length;
+      for (let i = this.currentPage; i < this.currentPage + 5; i++) {
+        this.pages.push(i)
+      }
+
+      this.selectedFilter = option;
     }
   },
   async mounted() {
-    const { characters, info } = await getCharacters();
+    const { characters, info } = await getFilteredCharacters();
     this.characters = characters;
+
+    // this.currentPage = getCurrentPage();
     this.currentPage = 1;
+    console.log(this.currentPage);
     this.totalPages = info.pages;
     for (let i = this.currentPage; i < this.currentPage + 5; i++) {
       this.pages.push(i)

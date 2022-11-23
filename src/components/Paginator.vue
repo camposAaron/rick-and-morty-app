@@ -54,7 +54,7 @@ export default {
 .paginator ul>li {
   min-width: 2rem;
   height: 2rem;
-  border: 1px solid whitesmoke;
+  border: 1px solid  rgb(97, 222, 253);
   text-align: center;
   background-color: rgb(31, 30, 30);
   color: rgb(97, 222, 253);
