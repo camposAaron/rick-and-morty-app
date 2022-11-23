@@ -96,7 +96,6 @@ export default {
 
     const charactersComments = characters.map(ch => {
       const data = JSON.parse(localStorage.getItem('comments'));
-      console.log(data);
       let userLength;
       if (data) {
         userLength = data.filter((c) => c.id == ch.id).length;

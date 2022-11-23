@@ -39,15 +39,14 @@ export default {
 
 <style scoped>
 .paginator {
-  
-  width: 30%;
+  width: 100%;
 }
 
 .paginator ul {
-  width: 100%;
-  justify-content: center;
   display: flex;
   flex-direction: row;
+  width: 100%;
+  justify-content: center;
   list-style: none;
 }
 

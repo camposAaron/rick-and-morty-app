@@ -9,9 +9,9 @@ defineProps({
 
 <template>
   <div class="titles">
-    <h1 class="green">{{ msg }}</h1>
-    <h3>
-      Prueba tecnica para optar al puesto de desarrollador frontend.
+    <h1>{{ msg }}</h1>
+    <h3>Powered by 
+      <a href='https://rickandmortyapi.com'>The Rick and Morty API</a>
     </h3>
   </div>
 </template>
@@ -22,10 +22,12 @@ h1 {
   font-weight: 500;
   font-size: 2.6rem;
   top: -10px;
+  color: rgb(97, 222, 253);
 }
 
 h3 {
   font-size: 1.2rem;
+  
 }
 
 .titles{
