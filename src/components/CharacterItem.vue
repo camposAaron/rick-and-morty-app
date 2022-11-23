@@ -24,7 +24,7 @@
 
         <div class="body-row">
           <h4>Location: </h4>
-          <p>{{ this.character.location.name }}</p>
+          <p>{{ this.character.location?.name }}</p>
         </div>
 
         <div class="body-row">
@@ -33,15 +33,6 @@
         </div>
 
       </div>
-
-      <div class="card-details-footer">
-
-        <button class="btn-details">
-           view more
-        </button>
-      </div>
-
-
     </section>
   </article>
 </template>
@@ -78,6 +69,18 @@ export default {
   width: 100%;
 }
 
+.card:hover{
+  cursor: pointer;
+  box-shadow: 0px 2px 16px rgb(85, 85, 85);
+  transform: translateY(-1rem);
+  transition: all 500ms;
+}
+
+.card:hover img{
+  filter: hue-rotate(180deg);
+  transition: all 500ms;
+}
+
 img {
   width: 100%;
   border-radius: 8px 8px 0px 0px;
@@ -85,6 +88,7 @@ img {
 }
 
 .card-details {
+  height: 100%;
   padding: 1rem;
 }
 
@@ -110,8 +114,8 @@ img {
 }
 
 .status-decorator {
-  width: 1rem;
-  height: 1rem;
+  width: 10px;
+  height: 10px;
   background-color: green;
   border-radius: 999px;
 }
@@ -126,6 +130,7 @@ img {
 .body-row {
   display: flex;
   width: 100%;
+  
 }
 
 .body-row h4 {
@@ -141,6 +146,7 @@ img {
   color: rgb(22, 22, 22);
   margin-left: 0.5rem;
   letter-spacing: 1px;
+  padding-top: 4px;
 }
 
 .card-details-footer {
@@ -148,16 +154,7 @@ img {
   flex-direction: row;
   width: 100%;
   justify-content: end;
-}
-
-.btn-details {
-  border: none;
-  padding: 1rem 1rem 1rem 1rem;
-  font-size: 14pt;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  background-color: rgb(154, 228, 42);
-  border-radius: 12px;
-
+  margin: auto;
 }
 
 

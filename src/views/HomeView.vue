@@ -3,7 +3,7 @@
     <Filter @setFilter="setFilter" />
     <section id="list">
       <template v-for="character in characters" :key="character.id">
-        <CharacterItem :character="character" />
+        <CharacterItem :character="character" @click="gotoDetails(character.id)" />
       </template>
     </section>
   </main>
@@ -20,7 +20,7 @@ import Filter from '../components/Filter.vue';
 import Paginator from '../components/Paginator.vue';
 
 import { getFilteredCharacters } from '../services/characters.service';
-
+import { getCommentsById } from '../services/comments.service';
 
 export default {
   data() {
@@ -29,7 +29,7 @@ export default {
       currentPage: 1,
       totalPages: 0,
       pages: [],
-      selectedFilter : ''
+      selectedFilter: ''
     };
   },
   components: {
@@ -39,21 +39,17 @@ export default {
   },
   methods: {
     async setPage(number) {
-      const { characters, info } = await getFilteredCharacters(this.selectedFilter,number );
+      const { characters, info } = await getFilteredCharacters(this.selectedFilter, number);
       this.characters = characters;
       this.currentPage = number;
-      //save on localstorage.
-      // setCurrentPage(this.currentPage);
       this.totalPages = info.pages;
     },
     async nextPages() {
       const newCurrentPage = this.pages.pop() + 1;
       this.pages = [];
-      const { characters, info } = await getFilteredCharacters( this.selectedFilter, newCurrentPage);
+      const { characters, info } = await getFilteredCharacters(this.selectedFilter, newCurrentPage);
       this.characters = characters;
       this.currentPage = newCurrentPage;
-      //save on localstorage.
-      // setCurrentPage(this.currentPage);
 
       this.totalPages = info.pages;
 
@@ -68,8 +64,7 @@ export default {
       const { characters, info } = await getFilteredCharacters(this.selectedFilter, newCurrentPage);
       this.characters = characters;
       this.currentPage = newCurrentPage;
-      //save on localstorage.
-      // setCurrentPage(this.currentPage);
+
       this.totalPages = info.pages;
 
       for (let i = this.currentPage; i < this.currentPage + 5; i++) {
@@ -88,15 +83,32 @@ export default {
       }
 
       this.selectedFilter = option;
+    },
+    async gotoDetails(id) {
+      console.log(id);
+      this.$router.push({ path: `character/${id}` })
     }
-  },
+  }
+  ,
   async mounted() {
     const { characters, info } = await getFilteredCharacters();
-    this.characters = characters;
 
-    // this.currentPage = getCurrentPage();
+
+    const charactersComments = characters.map(ch => {
+      const data = JSON.parse(localStorage.getItem('comments'));
+      console.log(data);
+      let userLength;
+      if (data) {
+        userLength = data.filter((c) => c.id == ch.id).length;
+      }
+      return { ...ch, comments: userLength }
+    });
+
+
+    this.characters = charactersComments;
+
     this.currentPage = 1;
-    console.log(this.currentPage);
+
     this.totalPages = info.pages;
     for (let i = this.currentPage; i < this.currentPage + 5; i++) {
       this.pages.push(i)

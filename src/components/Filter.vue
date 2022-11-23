@@ -3,7 +3,7 @@
   <ul class="status">
     <li :class="{ 'active': filter === option }" v-for="option in filtersOptions" :key="option"
       @click="setFilter(option)">
-      {{option}}
+      {{ option }}
     </li>
   </ul>
 
@@ -41,19 +41,19 @@ export default {
   display: flex;
   flex-direction: row;
   list-style: none;
-  width: 520px;
-  justify-content: flex-start;
+  width: min-content;
+  justify-content: center;
   margin-bottom: 2rem;
   margin-top: 2rem;
   background: #0000;
-  color: black;
   border-radius: 999px;
   align-items: center;
   height: 2rem;
   border: 2px solid rgb(97, 222, 253);
-  ;
   color: rgb(97, 222, 253);
   box-shadow: 0px 0px 18px #0a0a0a;
+  padding-left: 5px;
+  padding-right: 20px;
 }
 
 .status>li {
@@ -66,5 +66,11 @@ export default {
   cursor: pointer;
   transition: all 300ms;
   color: white
+}
+
+@media(max-width : 500px){
+  .status > li{
+    font-size: 8pt;
+  }
 }
 </style>

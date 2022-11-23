@@ -1,15 +1,177 @@
 <template>
   <div class="about">
-    <h1>This is an about page</h1>
+    <div class="info">
+      <CharacterItem :character="character" />
+    </div>
+    <div class="episodes">
+      <h2>Episodes: </h2>
+      <ul>
+        <li v-for="episode in character.episode">
+          <a :href="episode">{{ episode }} </a>
+        </li>
+      </ul>
+    </div>
+    <div class="comments">
+      <h2>Comments :</h2>
+      <section class="comments-section">
+        <template v-for="comment in comments">
+          <CommentItem :comment="comment" />
+        </template>
+      </section>
+
+      <form @submit.prevent="submitComment()">
+        <textarea class="input" id="textarea" v-model="newComment" placeholder="write a comment"></textarea>
+        <button type="submit">Send</button>
+      </form>
+    </div>
   </div>
 </template>
 
+<script>
+
+import CharacterItem from '../components/CharacterItem.vue';
+import CommentItem from '../components/Comment.vue';
+import { getCharacterById } from '../services/characters.service'
+import { getCommentsById, addComment } from '../services/comments.service'
+
+
+export default {
+  data() {
+    return {
+      id: '',
+      character: '',
+      comments: [],
+      newComment: ''
+    }
+  },
+  components: {
+    CharacterItem,
+    CommentItem
+  },
+  methods: {
+    submitComment() {
+      console.log(this.newComment);
+      const { cant, comments } = addComment(this.id, this.newComment);
+      this.character.comments = cant;
+      this.comments = comments;
+      this.newComment = ''
+    },
+
+  },
+  async mounted() {
+    this.id = this.$route.params.id;
+    const character = await getCharacterById(this.id);
+    const { cant, comments } = getCommentsById(this.id);
+    character.comments = cant;
+    this.character = character;
+    this.comments = comments;
+  }
+}
+</script>
+  
 <style>
-@media (min-width: 1024px) {
-  .about {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
+:root {
+  --input-border: #8b8a8b;
+  --input-focus-h: 245;
+  --input-focus-s: 100%;
+  --input-focus-l: 42%;
+}
+
+.about {
+  display: flex;
+  flex-flow: row wrap;
+  width: 100%;
+  justify-content: space-around;
+}
+
+.episodes {
+  display: flex;
+  flex-direction: column;
+}
+
+.episodes ul {
+  list-style: decimal;
+}
+
+.comments {
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+}
+
+.comments-section {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 6rem;
+  max-height: 12rem;
+  border: 0.5px solid #ccc;
+  border-radius: 8px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+.input {
+  width: 100%;
+  font-size: 16px;
+  font-size: max(16px, 1em);
+  font-family: inherit;
+  padding: 0.25em 0.5em;
+  background-color: #fff;
+  border: 2px solid var(--input-border);
+  border-radius: 4px;
+  height: 5rem;
+}
+
+button {
+  border: none;
+  padding: 1rem 1rem 1rem 1rem;
+  font-size: 12pt;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  background-color: rgb(154, 228, 42);
+  border-radius: 12px;
+}
+
+button:hover {
+  cursor: pointer;
+  background-color: rgb(109, 161, 30);
+}
+
+.info{
+  width: 30%;
+}
+
+
+@media (max-width: 820px) {
+  .info {
+    width: 40%;
+  }
+
+  .comments{
+    width: 80%;
+  }
+}
+
+@media (max-width: 700px) {
+  .info {
+    width: 60%;
+  }
+
+  .comments{
+    width: 80%;
+  }
+}
+
+
+@media (max-width: 450px) {
+  .info {
+    width: 100%;
+  }
+
+  .comments{
+    width: 100%;
   }
 }
 </style>

@@ -1,11 +1,23 @@
-<script setup>
+<script >
 import { RouterLink, RouterView } from 'vue-router'
 import Title from './components/Title.vue'
+
+export default {
+  methods : {
+    gotoHome(){
+      this.$router.push({path : '/'});
+    }
+  },
+  components : {
+    Title
+  }
+}
+
 </script>
 
 <template>
   <header>
-    <img alt="Rick and Morty Logo" class="logo" src="@/assets/logo.jpg" width="80" height="80" />
+    <img alt="Rick and Morty Logo" class="logo" src="@/assets/logo.jpg" width="80" height="80" @click="gotoHome()" />
 
     <div class="wrapper">
       <Title msg="Rick and Morty app" />
@@ -13,8 +25,9 @@ import Title from './components/Title.vue'
   </header>
 
   <RouterView />
-  
+
 </template>
+
 
 <style scoped>
 header {
@@ -52,7 +65,7 @@ nav a:first-of-type {
   border: 0;
 }
 
-img{
+img {
   border-radius: 99px;
 }
 
