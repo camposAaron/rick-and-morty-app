@@ -133,19 +133,19 @@ footer {
 
 @media (max-width: 1024px) {
   #list {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
-@media (max-width: 650px) {
+@media (max-width: 700px) {
   #list {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
     width: 90%;
     margin: 0px auto;
   }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 450px) {
   #list {
     grid-template-columns: 1fr;
     width: 100%;
