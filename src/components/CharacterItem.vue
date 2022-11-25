@@ -6,7 +6,7 @@
       <div class="card-details-header">
         <h2 class="character-name">{{ this.character.name }}</h2>
         <div class="status">
-          <div class="status-decorator"></div>
+          <div class="status-decorator" :style="{ backgroundColor: statusStyle(this.character.status) }"></div>
           <p>{{ this.character.status }}</p>
         </div>
       </div>
@@ -40,6 +40,15 @@
 <script>
 
 export default {
+  methods: {
+    statusStyle(status) {
+      switch (status) {
+        case 'Alive': return 'green'
+        case 'Dead': return '#cd4c4c'
+        case 'Unknown': return 'purple'
+      }
+    }
+  },
   props: {
     character: {
       name: String,
@@ -69,14 +78,14 @@ export default {
   width: 100%;
 }
 
-.card:hover{
+.card:hover {
   cursor: pointer;
   box-shadow: 0px 2px 16px rgb(85, 85, 85);
   transform: translateY(-1rem);
   transition: all 500ms;
 }
 
-.card:hover img{
+.card:hover img {
   filter: hue-rotate(180deg);
   transition: all 500ms;
 }
@@ -95,6 +104,7 @@ img {
 .card-details-header {
   display: flex;
   flex-flow: row wrap;
+  justify-content: space-between;
 }
 
 .character-name {
@@ -106,11 +116,15 @@ img {
 
 .status {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-left: 1.5rem;
   width: 20%;
-  font-size: 14pt;
+
+}
+
+.status p {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: lighter;
+  font-size: 14px;
 }
 
 .status-decorator {
@@ -118,6 +132,7 @@ img {
   height: 10px;
   background-color: green;
   border-radius: 999px;
+
 }
 
 .card-details-body {
@@ -130,7 +145,7 @@ img {
 .body-row {
   display: flex;
   width: 100%;
-  
+
 }
 
 .body-row h4 {
