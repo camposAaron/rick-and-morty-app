@@ -1,12 +1,13 @@
 <template>
-  <h2>Filters: </h2>
-  <ul class="status">
-    <li :class="{ 'active': filter === option }" v-for="option in filtersOptions" :key="option"
-      @click="setFilter(option)">
-      {{ option }}
-    </li>
-  </ul>
-
+  <div class="filter-bar">
+    <h2>Filters: </h2>
+    <ul class="status">
+      <li :class="{ 'active': filter === option }" v-for="option in filtersOptions" :key="option"
+        @click="setFilter(option)">
+        {{ option }}
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
@@ -32,6 +33,17 @@ export default {
 </script>
 
 <style scoped>
+
+.filter-bar {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center
+  ;
+}
+
+.filter-bar h2{
+  padding-right: 1rem;
+}
 .active {
   color: white;
   font-weight: 900;
@@ -68,8 +80,8 @@ export default {
   color: white
 }
 
-@media(max-width : 500px){
-  .status > li{
+@media(max-width : 500px) {
+  .status>li {
     font-size: 8pt;
   }
 }

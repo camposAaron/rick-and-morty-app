@@ -122,9 +122,11 @@ img {
 }
 
 .status p {
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-weight: lighter;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: rgb(22, 21, 21);
   font-size: 14px;
+
 }
 
 .status-decorator {
