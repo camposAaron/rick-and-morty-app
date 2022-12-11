@@ -1,39 +1,14 @@
-<template>
-  <div class="about">
-    <div class="info">
-      <CharacterItem :character="character" />
-    </div>
-    <div class="episodes">
-      <h2>Episodes: </h2>
-      <ul>
-        <li v-for="episode in character.episode">
-          <a :href="episode">{{ episode }} </a>
-        </li>
-      </ul>
-    </div>
-    <div class="comments">
-      <h2>Comments :</h2>
-      <section class="comments-section">
-        <template v-for="comment in comments">
-          <CommentItem :comment="comment" />
-        </template>
-      </section>
-
-      <form @submit.prevent="submitComment()">
-        <textarea class="input" id="textarea" v-model="newComment" placeholder="write a comment"></textarea>
-        <button type="submit">Send</button>
-      </form>
-    </div>
-  </div>
-</template>
-
 <script>
 
+import { Suspense } from 'vue';
 import CharacterItem from '../components/CharacterItem.vue';
 import CommentItem from '../components/Comment.vue';
+import Episode from '../components/Episode.vue';
+import Modal from '../components/Modal.vue';
+
 import { getCharacterById } from '../services/characters.service'
 import { getCommentsById, addComment } from '../services/comments.service'
-
+import { getEpisodeData } from '../services/episode.service'
 
 export default {
   data() {
@@ -41,22 +16,30 @@ export default {
       id: '',
       character: '',
       comments: [],
-      newComment: ''
+      newComment: '',
+      showModal: false,
+      episode: {}
     }
   },
   components: {
     CharacterItem,
-    CommentItem
+    CommentItem,
+    Episode,
+    Modal,
+    Suspense
   },
   methods: {
     submitComment() {
-      console.log(this.newComment);
       const { cant, comments } = addComment(this.id, this.newComment);
       this.character.comments = cant;
       this.comments = comments;
       this.newComment = ''
     },
 
+    async showEpisodeModal(episodeUrl) {
+      this.showModal = true;
+      this.episode = await getEpisodeData(episodeUrl);
+    }
   },
   async mounted() {
     this.id = this.$route.params.id;
@@ -71,6 +54,48 @@ export default {
 }
 </script>
   
+
+<template>
+  <div class="about">
+
+    <div class="info">
+      <CharacterItem :character="character" />
+    </div>
+
+    <div class="episodes">
+      <h2>Episodes: </h2>
+      <ul>
+        <li v-for="episode in character.episode" :key="episode.id">
+          <a class="episode-link" @click="showEpisodeModal(episode)">{{ episode }} </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="comments">
+      <h2>Comments :</h2>
+      <section class="comments-section">
+        <template v-for="comment in comments">
+          <CommentItem :comment="comment" />
+        </template>
+      </section>
+
+      <form @submit.prevent="submitComment()">
+        <textarea class="input" id="textarea" v-model="newComment" placeholder="write a comment"></textarea>
+        <button type="submit">Send</button>
+      </form>
+    </div>
+
+  </div>
+
+
+  <Modal v-if="showModal" @close-modal="showModal = false">
+
+    <Episode :chapter="episode" />
+
+  </Modal>
+
+</template>
+
 <style>
 :root {
   --input-border: #8b8a8b;
@@ -141,6 +166,12 @@ button:hover {
   background-color: rgb(109, 161, 30);
 }
 
+.episode-link:hover {
+  cursor: pointer;
+}
+
+
+
 .info {
   width: 30%;
 }
@@ -177,3 +208,4 @@ button:hover {
   }
 }
 </style>
+

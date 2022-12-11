@@ -122,6 +122,7 @@ img {
 }
 
 .status p {
+
   font-weight: 600;
   letter-spacing: 1px;
   color: rgb(22, 21, 21);

@@ -1,7 +1,6 @@
 import axios from "axios"
 
-const URL = "https://rickandmortyapi.com/api"
-
+const URL = "https://rickandmortyapi.com/api";
 
 const getFilteredCharacters = async (option = 'All', page = 1) => {
   const filter = option.toLocaleLowerCase();
